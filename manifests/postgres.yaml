@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:10-alpine
+        env:
+        - name: POSTGRES_USER
+          value: "myuser"
+        - name: POSTGRES_PASSWORD
+          value: "mysecretpassword"
+        - name: POSTGRES_DB
+          value: "myDB"
+        ports:
+          - name: posgres
+            containerPort: 5432
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-storage-volume
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 150m
+          requests:
+            memory: 64Mi
+            cpu: 100m
+      volumes:
+      - name: postgres-storage-volume
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+  selector:
+    app: postgres

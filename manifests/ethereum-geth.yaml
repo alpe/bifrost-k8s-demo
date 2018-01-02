@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: geth-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ethereum-geth
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: ethereum-geth
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ethereum-geth
+        component: ethereum-geth
+    spec:
+      containers:
+      - name: ethereum-geth
+        args:
+          - '--testnet'
+#          - '--fast'
+          - '--cache=256'
+          - '--rpc'
+          - '--rpcaddr=0.0.0.0'
+        image: ethereum/client-go:v1.7.3
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /root/
+          name: geth-storage-volume
+        ports:
+        - name: rpc
+          containerPort: 8545
+          protocol: TCP
+        - name: network
+          containerPort: 30303
+          protocol: TCP
+        resources:
+          limits:
+            memory: 1.5Gi
+            cpu: 450m
+          requests:
+            memory: 1.2Gi
+            cpu: 300m
+      volumes:
+      - name: geth-storage-volume
+        persistentVolumeClaim:
+          claimName: geth-pv-claim
+      terminationGracePeriodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ethereum-geth
+  labels:
+    app: ethereum-geth
+spec:
+  type: NodePort
+  ports:
+  - port: 8545
+  selector:
+    app: ethereum-geth

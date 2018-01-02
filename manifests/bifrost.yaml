@@ -1,0 +1,77 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bifrost
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: bifrost
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: bifrost
+    spec:
+      initContainers:
+      - name: init-bifrost
+        image: alpetest/mybifrost
+        imagePullPolicy: Always
+        args:
+          - 'migrate-db'
+          - '--config=/conf/bifrost-conf.cfg'
+          - '--debug'
+        volumeMounts:
+        - mountPath: /conf/
+          name: bifrost-conf-volume
+      containers:
+      - name: bifrost
+        args:
+          - 'server'
+          - '--config=/conf/bifrost-conf.cfg'
+        image: alpetest/mybifrost
+        imagePullPolicy: Always
+        ports:
+        - name: web
+          containerPort: 8000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /conf/
+          name: bifrost-conf-volume
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: web
+            httpHeaders:
+            - name: X-Custom-Header
+              value: heathcheck
+          initialDelaySeconds: 1
+          periodSeconds: 10
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 400m
+          requests:
+            memory: 64Mi
+            cpu: 250m
+      volumes:
+      - name: bifrost-conf-volume
+        configMap:
+          defaultMode: 420
+          name: bifrost-conf
+      terminationGracePeriodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bifrost
+  labels:
+    app: bifrost
+spec:
+  type: NodePort
+  ports:
+  - port: 8000
+  selector:
+    app: bifrost

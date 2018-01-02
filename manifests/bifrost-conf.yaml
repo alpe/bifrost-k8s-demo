@@ -1,0 +1,36 @@
+apiVersion: v1
+metadata:
+  name: bifrost-conf
+kind: ConfigMap
+data:
+  bifrost-conf.cfg: |-
+    port = 8000
+    using_proxy = false
+    access-control-allow-origin-header = "*"
+
+    [bitcoin]
+    master_public_key = "xpub661MyMwAqRbcGJUazPW2sWHEMhfvtxo27DafoVjqYHkCmdQdFRZFLqpmtj3ModRfQ7mgPdJxN4RyuJ422TXRZk9rRerijxyWWuK7FKWtXDk"
+    rpc_server = "bitcoin-core:18332"
+    rpc_user = "foo"
+    rpc_pass = "bar"
+    testnet = true
+    minimum_value_btc = "0.0001"
+
+    [ethereum]
+    master_public_key = "xpub661MyMwAqRbcGJUazPW2sWHEMhfvtxo27DafoVjqYHkCmdQdFRZFLqpmtj3ModRfQ7mgPdJxN4RyuJ422TXRZk9rRerijxyWWuK7FKWtXDk"
+    rpc_server = "ethereum-geth:8545"
+    network_id = "3"
+    minimum_value_eth = "0.00001"
+
+    [stellar]
+    issuer_public_key = "GCZAKXMQZKYJBQK7U2LFIF77PKGDCZRU3IOPV2VON5CHWJSWDH2B5A42"
+    signer_secret_key = "YOUR_KEY"
+    token_asset_code = "YOU1"
+    needs_authorize = false
+    horizon = "https://horizon-testnet.stellar.org"
+    network_passphrase = "Test SDF Network ; September 2015"
+
+    [database]
+    type="postgres"
+    dsn="postgres://myuser:mysecretpassword@postgres/myDB?sslmode=disable"
+    migrationFilePath="/migrations"

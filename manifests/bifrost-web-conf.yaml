@@ -1,0 +1,15 @@
+apiVersion: v1
+metadata:
+  name: bifrost-web-conf
+kind: ConfigMap
+data:
+  env.js: |-
+    var params = {
+        network: 'test',
+        horizonURL: 'https://horizon-testnet.stellar.org',
+        bifrostURL: 'http://localhost:8000',
+        assetCode: 'YOU1',
+        price: '1',
+        issuingPublicKey: 'GCZAKXMQZKYJBQK7U2LFIF77PKGDCZRU3IOPV2VON5CHWJSWDH2B5A42',
+        preSaleMode: false,
+    };
