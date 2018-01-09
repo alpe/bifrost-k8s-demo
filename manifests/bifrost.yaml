@@ -70,8 +70,9 @@ metadata:
   labels:
     app: bifrost
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-  - port: 8000
+    - name: web
+      port: 8000
   selector:
     app: bifrost

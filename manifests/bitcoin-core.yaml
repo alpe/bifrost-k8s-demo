@@ -1,32 +1,20 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: bitcoin-core-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Mi
----
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
   name: bitcoin-core
+  labels:
+    app: bitcoin-core
 spec:
+  serviceName: bitcoin-core
   replicas: 1
-  revisionHistoryLimit: 2
-  selector:
-    matchLabels:
-      app: bitcoin-core
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app: bitcoin-core
     spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: bitcoin-core
         args:
@@ -46,15 +34,22 @@ spec:
             name: bitcoin-storage-volume
         resources:
           limits:
-            memory: 512Mi
-            cpu: 500m
+            memory: 2Gi
+            cpu: 300m
           requests:
-            memory: 64Mi
-            cpu: 150m
-      volumes:
-      - name: bitcoin-storage-volume
-        persistentVolumeClaim:
-          claimName: bitcoin-core-pv-claim
+            memory: 1.5Gi
+            cpu: 250m
+  volumeClaimTemplates:
+    - metadata:
+        name: bitcoin-storage-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 20Gi
+
 ---
 apiVersion: v1
 kind: Service
@@ -63,7 +58,7 @@ metadata:
   labels:
     app: bitcoin-core
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 18332
   selector:

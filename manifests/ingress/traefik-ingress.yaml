@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-console
+  labels:
+    app: traefik
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - host: traefik.bifrost-demo.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: traefik-console
+          servicePort: 8080

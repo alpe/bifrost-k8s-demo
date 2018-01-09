@@ -7,7 +7,7 @@ data:
     var params = {
         network: 'test',
         horizonURL: 'https://horizon-testnet.stellar.org',
-        bifrostURL: 'http://localhost:8000',
+        bifrostURL: 'https://api.bifrost-demo.example.com',
         assetCode: 'YOU1',
         price: '1',
         issuingPublicKey: 'GCZAKXMQZKYJBQK7U2LFIF77PKGDCZRU3IOPV2VON5CHWJSWDH2B5A42',
