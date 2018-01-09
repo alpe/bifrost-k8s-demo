@@ -1,9 +1,9 @@
 # Bifrost demo for minikube
 Bifrost is an application to bridge Ehereum or Bitcoin blockchain to [Stellar](https://www.stellar.org/) to do an [initial coin offiering (ICO)](https://www.stellar.org/) or build an [anchor/exchange](https://www.stellar.org/developers/guides/anchor/) for these coins.
 
-This project is a collection of kubernetes manifest files to setup a local kubernetes demo. Please note this WIP.
+This project is a collection of kubernetes manifest files to setup a local kubernetes demo. Please note this is WIP and only for demo purpose.
 
-More about Bifrost can be found in the [docs](https://github.com/stellar/go/tree/master/services/bifrost)
+More about Bifrost can be found in the [package docs](https://github.com/stellar/go/tree/master/services/bifrost) or the [design document](https://docs.google.com/document/d/1lxn5YXuDWMpX2m9DvKNPHGgZHSG1mviPET_Dm55xRKI/edit#heading=h.ipw1sk4jppwc)
 
 Remeber to use **Testnet** config only. This is not a valid, persistent nor secure prodction setup.
 
@@ -13,7 +13,7 @@ Remeber to use **Testnet** config only. This is not a valid, persistent nor secu
 * ~~[stellar-horizon](https://github.com/stellar/go/tree/master/services/horizon)~~
 * ~~[stellar-core](https://github.com/stellar/stellar-core)~~
 
-I use customized versions of:
+I use customized branches of:
 * [bifrost](https://github.com/stellar/go/tree/master/services/bifrost)
 * [bifrost-web](https://github.com/stellar/bifrost-js-sdk)
 
@@ -23,7 +23,7 @@ In this great article you can find everything to setup your token and accounts:
 
 ## Get started
 
-1. Prepare accounts in stellar testnet
+1. Prepare accounts in Stellar testnet
 You may find this Go code helpful for the setup operations: https://gist.github.com/alpe/bb604fb3d11261e3aea7924edfd004ba
 
 2. Edit bifrost config for account/ token data
@@ -57,6 +57,7 @@ curl -X POST  -H "Content-Type: application/json" -d '{"toWhom":"0x5CB26d92B3aDB
 
 10. Access new account via https://stellarterm.com/#testnet
 
+11. Check ETH has been received on your bip32 destination child account via https://www.myetherwallet.com/ 
  
 ## Resources
 * [Bifrost](https://github.com/stellar/go/tree/master/services/bifrost)
@@ -117,6 +118,6 @@ See: https://docs.docker.com/docker-cloud/builds/push-images/
 ```bash
 export DOCKER_ID_USER="username"
 docker login
-docker tag mybifrost $DOCKER_ID_USER/yourbifrost
+docker tag yourbifrost $DOCKER_ID_USER/yourbifrost
 docker push $DOCKER_ID_USER/yourbifrost
 ```
