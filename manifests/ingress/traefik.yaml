@@ -1,0 +1,110 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: traefik-ingress-controller
+  labels:
+    app: traefik-ingress
+spec:
+  serviceName: traefik
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-ingress
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: traefik-ingress
+    spec:
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+      - name: init-traefik
+        image: alpine:latest
+        imagePullPolicy: Always
+        command:
+         - '/bin/chmod'
+        args:
+          - '-R'
+          - '600'
+          - '/acme'
+        volumeMounts:
+          - name: traefik-acme-volume
+            mountPath: "/acme"
+      containers:
+        - image: traefik:1.4.6
+          name: traefik-ingress
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+            - containerPort: 443
+              name: https
+              protocol: TCP
+            - containerPort: 8080
+              name: console
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+            - name: traefik-acme-volume
+              mountPath: "/acme"
+          resources:
+            limits:
+              cpu: 150m
+              memory: 32Mi
+            requests:
+              cpu: 100m
+              memory: 16Mi
+          args:
+            - --web
+            - --kubernetes
+            - --logLevel=INFO
+            - --configfile=/config/traefik.toml
+      volumes:
+        - name: config
+          configMap:
+            defaultMode: 420
+            name: traefik-conf
+  volumeClaimTemplates:
+    - metadata:
+        name: traefik-acme-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik
+  labels:
+    app: traefik-ingress
+spec:
+  selector:
+    app: traefik-ingress
+  ports:
+    - port: 80
+      name: http
+    - port: 443
+      name: https
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-console
+  labels:
+    app: traefik-ingress
+spec:
+  selector:
+    app: traefik-ingress
+  ports:
+    - port: 8080
+      name: webui

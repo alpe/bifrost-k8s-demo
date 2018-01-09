@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: bifrost
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - host: api.bifrost-demo.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: bifrost
+          servicePort: 8000
