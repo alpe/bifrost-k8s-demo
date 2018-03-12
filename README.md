@@ -122,6 +122,14 @@ docker tag yourbifrost $DOCKER_ID_USER/yourbifrost
 docker push $DOCKER_ID_USER/yourbifrost
 ```
 
+## Support/ Donations
+
+You can find me on
+* Twitter: [@alpe1](https://twitter.com/alpe1)
+* Slack `alpe` at [stellar slack](https://stellar-public.slack.com/)
+
+If you find this demo helpful, you can send me some XLM for a coffee to `GB7J2ML4P3OCP4JM6ASQ4LK3KQO3F7GLNPOBZCYH4N37DRRWK723W7QM`
+
 ## License
 MIT License
 
