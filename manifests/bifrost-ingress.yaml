@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
-  - host: api.bifrost-demo.example.com
+  - host: api.bifrost-demo.alpe1.com
     http:
       paths:
       - backend:

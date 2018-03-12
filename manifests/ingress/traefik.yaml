@@ -20,7 +20,7 @@ spec:
         fsGroup: 1000
       initContainers:
       - name: init-traefik
-        image: alpine:latest
+        image: alpine:1.5-alpine
         imagePullPolicy: Always
         command:
          - '/bin/chmod'

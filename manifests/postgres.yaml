@@ -21,9 +21,15 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: POSTGRES_USER
-          value: "myuser"
+          valueFrom:
+            secretKeyRef:
+              key: DB_USER
+              name: bifrost-credentials
         - name: POSTGRES_PASSWORD
-          value: "mysecretpassword"
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: bifrost-credentials
         - name: POSTGRES_DB
           value: "myDB"
         - name: PGDATA

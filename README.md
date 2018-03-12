@@ -1,7 +1,7 @@
-# Bifrost demo for minikube
-Bifrost is an application to bridge Ehereum or Bitcoin blockchain to [Stellar](https://www.stellar.org/) to do an [initial coin offiering (ICO)](https://www.stellar.org/) or build an [anchor/exchange](https://www.stellar.org/developers/guides/anchor/) for these coins.
+# Bifrost demo for minikube/ Google Kubernets Engine
+Bifrost is an application to bridge Ehereum or Bitcoin blockchain to [Stellar  ](https://www.stellar.org/) to do an [initial coin offiering (ICO)](https://www.stellar.org/) or build an [anchor/exchange](https://www.stellar.org/developers/guides/anchor/) for these coins.
 
-This project is a collection of kubernetes manifest files to setup a local kubernetes demo. Please note this is WIP and only for demo purpose.
+This project is a collection of kubernetes manifest files to setup a local or GKE kubernetes demo. Please note this is WIP and only for demo purpose. The docker artifacts for bifrost are custom branches, not officially supported and may be outdated already. Please see https://github.com/alpe/community-bifrost for the source code.
 
 More about Bifrost can be found in the [package docs](https://github.com/stellar/go/tree/master/services/bifrost) or the [design document](https://docs.google.com/document/d/1lxn5YXuDWMpX2m9DvKNPHGgZHSG1mviPET_Dm55xRKI/edit#heading=h.ipw1sk4jppwc)
 
@@ -121,3 +121,26 @@ docker login
 docker tag yourbifrost $DOCKER_ID_USER/yourbifrost
 docker push $DOCKER_ID_USER/yourbifrost
 ```
+
+## License
+MIT License
+
+Copyright (c) 2018 Alexander Peters
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

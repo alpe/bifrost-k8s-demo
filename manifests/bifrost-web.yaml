@@ -26,6 +26,7 @@ spec:
         volumeMounts:
         - mountPath: /web/conf
           name: bifrost-web-conf-volume
+          readOnly: true
         lifecycle:
           preStop:
             exec:
