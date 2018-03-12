@@ -23,9 +23,26 @@ spec:
           - 'migrate-db'
           - '--config=/conf/bifrost-conf.cfg'
           - '--debug'
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: DB_USER
+              name: bifrost-credentials
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: bifrost-credentials
+        - name: SIGNER_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: SIGNER_SECRET_KEY
+              name: bifrost-credentials
         volumeMounts:
         - mountPath: /conf/
           name: bifrost-conf-volume
+          readOnly: true
       containers:
       - name: bifrost
         args:
@@ -33,6 +50,22 @@ spec:
           - '--config=/conf/bifrost-conf.cfg'
         image: alpetest/mybifrost
         imagePullPolicy: Always
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: DB_USER
+              name: bifrost-credentials
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: bifrost-credentials
+        - name: SIGNER_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: SIGNER_SECRET_KEY
+              name: bifrost-credentials
         ports:
         - name: web
           containerPort: 8000
